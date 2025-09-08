@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Puzzle Game 💖</title>
+  <style>
+    body {
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      text-align: center;
+      background: #ffe6f2;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #ff4081;
+    }
+    canvas {
+      border: 4px solid #ff80ab;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #ff80ab;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff4081;
+    }
+  </style>
+</head>
+<body>
+  <h1>💞 Our Special Puzzle 💞</h1>
+  <canvas id="puzzle" width="400" height="400"></canvas>
+  <br />
+  <button onclick="shuffle()">Shuffle Again 🔄</button>
+
+  <script>
+    const rows = 3; // number of rows
+    const cols = 3; // number of columns
+    const canvas = document.getElementById("puzzle");
+    const ctx = canvas.getContext("2d");
+    const pieceWidth = canvas.width / cols;
+    const pieceHeight = canvas.height / rows;
+
+    let pieces = [];
+    let empty = { x: cols - 1, y: rows - 1 };
+    let img = new Image();
+    img.src = "photo.jpg"; // 🔹 Replace with your photo file name
+
+    img.onload = function () {
+      initPuzzle();
+      drawPuzzle();
+    };
+
+    function initPuzzle() {
+      pieces = [];
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          pieces.push({ x, y });
+        }
+      }
+      pieces.pop(); // remove last piece (empty slot)
+      shuffle();
+    }
+
+    function shuffle() {
+      for (let i = pieces.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
+      }
+      drawPuzzle();
+    }
+
+    function drawPuzzle() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let i = 0;
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          if (x === empty.x && y === empty.y) continue;
+          const piece = pieces[i++];
+          ctx.drawImage(
+            img,
+            piece.x * pieceWidth,
+            piece.y * pieceHeight,
+            pieceWidth,
+            pieceHeight,
+            x * pieceWidth,
+            y * pieceHeight,
+            pieceWidth,
+            pieceHeight
+          );
+        }
+      }
+    }
+  </script>
+</body>
+</html>
